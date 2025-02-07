@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CSharpKomplett": {
+      "commandName": "Project",
+      "commandLineArgs": "param1 param2 param3"
+    }
+  }
+}

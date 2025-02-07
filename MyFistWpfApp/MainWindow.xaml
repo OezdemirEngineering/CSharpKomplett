@@ -1,0 +1,44 @@
+﻿<Window x:Class="MyFistWpfApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MyFistWpfApp"
+        mc:Ignorable="d"
+        Title="MyApp" Height="450" Width="800">
+    <Grid>
+
+        <Grid Grid.Row="0" x:Name="LoginView" Background="DarkGreen" Visibility="Visible">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            
+            
+            <TextBlock x:Name="Output" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" Margin="10" TextWrapping="Wrap" Text="Login" VerticalAlignment="Center" FontSize="25"/>
+            <TextBox x:Name="UsernameInput" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" Margin="10" VerticalAlignment="Center" Width="200" Height="50"/>
+            <TextBox x:Name="PasswordInput" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center" Margin="10" VerticalAlignment="Center" Width="200" Height="50"/>
+            <Button   HorizontalAlignment="Center" Grid.Row="3" Grid.Column="1" x:Name="LoginButton" Content="Click me" Margin="10" VerticalAlignment="Center" Background="#FFDDDDDD" Height="75" Width="134" Click="LoginButton_Click" />
+        </Grid>
+
+        <Grid x:Name="DashbooardView" Background="Blue" Visibility="Collapsed" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Button   HorizontalAlignment="Center" Grid.Row="3" Grid.Column="1" x:Name="LogoutButton" Content="Logout" Margin="10" VerticalAlignment="Center" Background="#FFDDDDDD" Height="75" Width="134" Click="LogoutButton_Click"/>
+
+        </Grid>
+    </Grid>
+</Window>
