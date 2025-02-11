@@ -62,6 +62,10 @@ namespace Common.Utils
 
                 });
 
+                var res = from x in argsList
+                    where x is not null
+                    select x.ToString();
+
                 newLogItem = string.Format(message, argStrList);
             }
 

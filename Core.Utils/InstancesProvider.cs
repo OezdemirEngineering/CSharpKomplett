@@ -9,19 +9,10 @@ namespace Common.Utils
 {
     public static class InstancesProvider
     {
-        public static ILogger Logger => GetSimpleLogger();
-
-        private static ILogger GetSimpleLogger()
+        public static ILogger CreateLogger()
         {
-            if(simpleLoggerInstance is null)
-            {
-                simpleLoggerInstance = new SimpleLogger();
-            }
-
-            return simpleLoggerInstance;
+            return new SimpleLogger();
         }
-
-        private static SimpleLogger simpleLoggerInstance;
 
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Common.Utils
 {
@@ -18,10 +19,10 @@ namespace Common.Utils
                 return "NULL";
             }
 
-            var descrAttributes = fi.GetCustomAttributes(typeof(DescriptionAttribute), false) as DescriptionAttribute[];
+            var descrAttributes = fi.GetCustomAttributes(typeof(DescriptionAttribute), false) as DescriptionAttribute[]
+                                  ?? Array.Empty<DescriptionAttribute>();
 
-            if (descrAttributes != null && 
-                descrAttributes.Any())
+            if (descrAttributes.Any())
             {
                 return descrAttributes.First().Description;
             }
