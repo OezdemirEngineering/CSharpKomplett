@@ -7,15 +7,75 @@ using Common.Utils;
 
 namespace Core.Interfaces.DataStructs
 {
-    public struct DeviceMetricMeasuresDto : ILogViewable
+    public delegate void MetricMeasuresChangedEventHandler(DeviceMetricMeasuresDto newItem);
+
+    public interface IMetricMeasuresDtoChangesProvider
     {
-        public MetricUnits Units { get; set; }
+        event MetricMeasuresChangedEventHandler ChangedEvent;
+    }
 
-        public double Height { get; set; }
+    public struct DeviceMetricMeasuresDto : IMetricMeasuresDtoChangesProvider, ILogViewable
+    {
+        private MetricUnits myUnits;
+        private double myHeight;
+        private double myWidth;
+        private double myThickness;
 
-        public double Width { get; set; }
 
-        public double Thickness { get; set; }
+        public event MetricMeasuresChangedEventHandler ChangedEvent;
+        public event EventHandler NativeChangedEvent;
+
+        public MetricUnits Units 
+        { 
+            get => myUnits;
+            set
+            {
+                if (myUnits != value)
+                {
+                    myUnits = value;
+                    OnMeasuresChanged();
+                }
+            }
+        }
+
+        public double Height 
+        { 
+            get => myHeight;
+            set
+            {
+                if(myHeight != value)
+                {
+                    myHeight = value;
+                    OnMeasuresChanged();
+                }
+            }
+        }
+
+        public double Width 
+        { 
+            get => myWidth;
+            set
+            {
+                if(myWidth != value)
+                {
+                    myWidth = value;
+                    OnMeasuresChanged();
+                }
+            }
+        }
+
+        public double Thickness 
+        { 
+            get => myThickness;
+            set
+            {
+                if(myThickness != value)
+                {
+                    myThickness = value;
+                    OnMeasuresChanged();
+                }
+            }
+        }
 
 
         public string ToLogView()
@@ -31,6 +91,12 @@ namespace Core.Interfaces.DataStructs
             ];
 
             return output + string.Join(Environment.NewLine, logItems);
+        }
+
+        private void OnMeasuresChanged()
+        {
+            ChangedEvent?.Invoke(this);
+            NativeChangedEvent?.Invoke(this, EventArgs.Empty);
         }
     }
 }

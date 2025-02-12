@@ -19,11 +19,4 @@ namespace Core.Interfaces.DataStructs
 
         public TestCalculationMethod CalculationMehtod { get; set; }
     }
-
-    interface IInterface
-    {
-        TestCalculationMethod CalculationMehtod { get; set; }
-
-        double Sum();
-    }
 }

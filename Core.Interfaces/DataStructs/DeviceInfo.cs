@@ -13,7 +13,7 @@ namespace Core.Interfaces.DataStructs
 
         public string Manufacturer { get; set; } = string.Empty;
 
-        public Guid? SerialNumber { get; set; }
+        public string SerialNumber { get; set; }
 
         public DateTime? ProductionTime { get; set; }
     }

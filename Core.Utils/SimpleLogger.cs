@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.VisualBasic;
 
 namespace Common.Utils
 {
@@ -58,13 +60,10 @@ namespace Common.Utils
                     var logViewable = x as ILogViewable;
                     return logViewable is null
                         ? x.ToString()
-                        : logViewable.ToString();
+                        : logViewable.ToLogView();
 
                 });
-
-                var res = from x in argsList
-                    where x is not null
-                    select x.ToString();
+                
 
                 newLogItem = string.Format(message, argStrList);
             }

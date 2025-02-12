@@ -1,8 +1,11 @@
-﻿using System.Data;
+﻿using System.Collections;
+using System.Data;
+using System.Net.Mime;
 using System.Reflection.Metadata.Ecma335;
 using Common.Utils;
 using Core.Interfaces;
 using Core.Interfaces.DataStructs;
+using Microsoft.CSharp.RuntimeBinder;
 
 namespace Core.App
 {
@@ -10,60 +13,42 @@ namespace Core.App
     {
         static void Main( string[ ] args )
         {
-            var testObj = new DeviceMetricMeasuresDto();
-            Console.WriteLine(testObj.ToLogView());
+            ILogger logger = InstancesProvider.CreateLogger();
 
-            TestCalculationMethod method = Sum;
-
-            method(new double[5], out int b);
-
-            Func<double[ ], int, double> testFunc = (x, y) =>
+            DeviceMetricMeasuresDto metrics = new DeviceMetricMeasuresDto();
+            metrics.ChangedEvent += OnMetricsChangedEvent;
+            metrics.ChangedEvent += x =>
             {
-                var output = x.Sum();
-                return output + y;
+                logger.LogInfo("{0}", x);
             };
 
-            Action<double> a = x => x = x + 5;
+            metrics.NativeChangedEvent += OnMetricsNativeChangedEvent;
 
-            var res = Calculation(testFunc, 5);
+            metrics.Units = MetricUnits.Meter;
+            metrics.Height = 120;
+            metrics.Width = 130;
+
+            metrics.NativeChangedEvent -= OnMetricsNativeChangedEvent;
+
+            metrics.Thickness = 50;
 
         }
 
-        delegate double TestCalculationMethod(double[] values, out int b);
-
-        static double Sum(double[] values, out int b)
+        private static void OnMetricsNativeChangedEvent( object sender, EventArgs e )
         {
-            b = values?.Length ?? 0;
-            return values?.Sum() ?? 0;
-        }
-
-        static double Product(double[] values)
-        {
-            double res = 1.0;
-
-            foreach (var value in values)
+            if (sender is DeviceMetricMeasuresDto item)
             {
-                res = res * value;
+                Console.WriteLine( "NATIVE: "+ item.ToLogView() );
             }
 
-            return res;
         }
 
-        static double Calculation( Func<double[ ], int, double> method, int valuesTotalNumber)
+        private static void OnMetricsChangedEvent( DeviceMetricMeasuresDto newItem )
         {
-            double[] values = new double[valuesTotalNumber];
-            for (int i = 0; i < values.Length; i++)
-            {
-                values[i] = i + 1;
-            }
-
-            return method?.Invoke(values, valuesTotalNumber) ?? -128;
+            Console.WriteLine(newItem.ToLogView());
         }
 
-        static double Test()
-        {
-            return 123;
-        }
+        delegate BaseResult<object> TestCalculationMethod(double[] values, out int b);
 
     }
 }
