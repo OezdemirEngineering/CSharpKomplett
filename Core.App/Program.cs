@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Data;
 using System.Net.Mime;
+using System.Reflection;
 using System.Reflection.Metadata.Ecma335;
 using Common.Utils;
+using Core.FakeExternalLib;
 using Core.Interfaces;
 using Core.Interfaces.DataStructs;
 using Microsoft.CSharp.RuntimeBinder;
@@ -13,42 +15,50 @@ namespace Core.App
     {
         static void Main( string[ ] args )
         {
+            IManufacture manufacture = ComponentProvider.CreateManufacture(
+                "Test-factory-Saxony",
+                "C:\\users\\ingen\\Downloads\\DeviceData.json");
+
+            manufacture.ManufactureDeviceReadyEvent += Manufacture_ManufactureDeviceReadyEvent;
+            manufacture.ManufactureDeviceDowntimeDetectedEvent += Manufacture_ManufactureDeviceDowntimeDetectedEvent;
+
             ILogger logger = InstancesProvider.CreateLogger();
+            logger.NewLogEntryAvailableEvent += Logger_NewLogEntryAvailableEvent;
 
-            DeviceMetricMeasuresDto metrics = new DeviceMetricMeasuresDto();
-            metrics.ChangedEvent += OnMetricsChangedEvent;
-            metrics.ChangedEvent += x =>
-            {
-                logger.LogInfo("{0}", x);
-            };
+            DeviceManufactureManager manager = new DeviceManufactureManager(manufacture, logger);
+            Task t = Task.Run(manager.Start);
+            t.Wait();
 
-            metrics.NativeChangedEvent += OnMetricsNativeChangedEvent;
+            t = Task.Run(() => manufacture.Start(StartCallback));
+            t.Wait();
 
-            metrics.Units = MetricUnits.Meter;
-            metrics.Height = 120;
-            metrics.Width = 130;
 
-            metrics.NativeChangedEvent -= OnMetricsNativeChangedEvent;
 
-            metrics.Thickness = 50;
+            Thread.Sleep(10000);
 
+            t = Task.Run( () => manufacture.Stop( StartCallback ) );
+            t.Wait();
         }
 
-        private static void OnMetricsNativeChangedEvent( object sender, EventArgs e )
+        private static void Logger_NewLogEntryAvailableEvent( LogItemSeverity severity, string newLogEntry )
         {
-            if (sender is DeviceMetricMeasuresDto item)
-            {
-                Console.WriteLine( "NATIVE: "+ item.ToLogView() );
-            }
-
+            Console.WriteLine($"NEW LOG ITEM | {severity}: {newLogEntry}");
         }
 
-        private static void OnMetricsChangedEvent( DeviceMetricMeasuresDto newItem )
+        private static void Manufacture_ManufactureDeviceDowntimeDetectedEvent( IManufactureDevice sender, DateTime time, TimeSpan? duration )
         {
-            Console.WriteLine(newItem.ToLogView());
+            Console.WriteLine($"{sender.Name} - {duration?.TotalMicroseconds ?? -1} ms");
         }
 
-        delegate BaseResult<object> TestCalculationMethod(double[] values, out int b);
+        private static void Manufacture_ManufactureDeviceReadyEvent( IManufactureDevice availableDevice , bool isReady )
+        {
+            Console.WriteLine($"{availableDevice.Name} - {availableDevice.OperationStatus} | {isReady}");
+        }
+
+        private static void StartCallback(bool result)
+        {
+        }
+
 
     }
 }

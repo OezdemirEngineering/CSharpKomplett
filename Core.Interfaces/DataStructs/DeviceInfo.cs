@@ -7,7 +7,7 @@ using Common.Utils;
 
 namespace Core.Interfaces.DataStructs
 {
-    public class DeviceInfo //: ILogViewable
+    public class DeviceInfo : ILogViewable
     {
         public string Id { get; set; }
 
@@ -15,6 +15,19 @@ namespace Core.Interfaces.DataStructs
 
         public string SerialNumber { get; set; }
 
-        public DateTime? ProductionTime { get; set; }
+        public string ToLogView()
+        {
+            string output = GetType().FullName ??
+                            typeof( DeviceInfo ).ToString();
+
+            List<string> logItems =
+            [
+                $"- ID: {Id ?? "-"}",
+                $"- Manufacturer: {Manufacturer ?? "-"}",
+                $"- SerialNumber: {SerialNumber ?? "XXX-XXX-XXX"}"
+            ];
+
+            return output + string.Join( Environment.NewLine, logItems );
+        }
     }
 }

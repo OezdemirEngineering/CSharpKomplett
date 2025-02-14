@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,6 +11,10 @@
     <ProjectReference Include="..\Core.Interfaces.ImplB\Core.Interfaces.ImplB.csproj" />
     <ProjectReference Include="..\Core.Interfaces\Core.Interfaces.csproj" />
     <ProjectReference Include="..\Core.Utils\Common.Utils.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="FakeExternalLib\Config\" />
   </ItemGroup>
 
 </Project>

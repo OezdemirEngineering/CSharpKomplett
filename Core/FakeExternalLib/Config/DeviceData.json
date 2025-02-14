@@ -1,0 +1,26 @@
+[
+    {
+      "Id": "device-001",
+      "Manufacturer": "Acme Inc.",
+      "SerialNumber": "12345678-abcd-1234-efgh-87654321",
+      "SystemRelevanceIndex": 4
+    },
+	{
+      "Id": "device-002",
+      "Manufacturer": "Stark Industries",
+      "SerialNumber": "abcdef01-2345-6789-abcd-ef0123456789",
+      "SystemRelevanceIndex": 1
+    },
+	{
+      "Id": "device-003",
+      "Manufacturer": "Wayne Enterprises",
+      "SerialNumber": "fedcba98-7654-3210-dcba-98765432",
+      "SystemRelevanceIndex": null
+    },
+	{
+      "Id": "device-004",
+      "Manufacturer": "SHS",
+      "SerialNumber": "01234567-89ab-cdef-0123-456789abcdef",
+      "SystemRelevanceIndex": 100
+    }
+ ]

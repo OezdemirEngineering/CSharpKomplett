@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace Common.Utils
 {
+    public delegate void NewLogEntryAvailableHandler(LogItemSeverity severity, string newLogEntry);
+
     public interface ILogger
     {
+        event NewLogEntryAvailableHandler NewLogEntryAvailableEvent;
+
         void LogInfo( string message, params object[ ] messageArgs );
 
         void LogWarning( string message, params object[ ] messageArgs );

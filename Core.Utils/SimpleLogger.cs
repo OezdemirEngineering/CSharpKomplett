@@ -12,6 +12,8 @@ namespace Common.Utils
     {
         private readonly List<string> myContainedItems;
 
+        public event NewLogEntryAvailableHandler NewLogEntryAvailableEvent;
+
         public IReadOnlyList<string> ContainedItems => myContainedItems;
 
         public SimpleLogger()
@@ -50,7 +52,7 @@ namespace Common.Utils
             string newLogItem = message;
             if (argsList.Any())
             {
-                IEnumerable<string> argStrList = argsList.Select(x =>
+                IEnumerable<object> argStrList = argsList.Select(x =>
                 {
                     if (x is null)
                     {
@@ -65,11 +67,12 @@ namespace Common.Utils
                 });
                 
 
-                newLogItem = string.Format(message, argStrList);
+                newLogItem = string.Format(message, argStrList.ToArray());
             }
 
             myContainedItems.Add($"{severity.GetDescription()} | {newLogItem}");
+            Task.Run(() => 
+                NewLogEntryAvailableEvent?.Invoke(severity, newLogItem));
         }
-
     }
 }
